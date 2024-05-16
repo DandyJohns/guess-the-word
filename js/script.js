@@ -1,5 +1,5 @@
 // The unordered list where the player’s guessed letters will appear.
-const guessed = document.querySelector(".guessed-letters");
+const guessedUL = document.querySelector(".guessed-letters");
 
 // The button with the text “Guess!” in it. 
 const guessButton = document.querySelector(".guess");
@@ -27,8 +27,6 @@ const playAgainButton = document.querySelector(".play-again");
 const word = 'magnolia';
 const guessedLetters = [];
 
-
-
 // Place holders for each letter 
 const placeHolder = function(word) {
     const placeholderLetters = [];
@@ -45,11 +43,10 @@ guessButton.addEventListener('click', function (event) {
     const usersGuess = letterInput.value; // Get the user's guess
     message.innerText = '';
     
-    const goodGuess = validateInput(usersGuess) // validate the input value
+    const goodGuess = validateInput(usersGuess); // validate the input value
     
     if(goodGuess != undefined) {
-        console.log(goodGuess)
-        makeGuess(goodGuess)
+        makeGuess(goodGuess);
     }
 
     letterInput.value = ''; // Clear the input field
@@ -69,13 +66,46 @@ const validateInput = function (input) {
 };
 
 const makeGuess = function (guess) {
-    const upperCaseGuess = guess.toUpperCase()
-
+    const upperCaseGuess = guess.toUpperCase();
     if(guessedLetters.includes(upperCaseGuess)) {
         message.innerText = "You already guessed that letter, silly. Try again.";
     } else {
-        guessedLetters.push(upperCaseGuess)
+        guessedLetters.push(upperCaseGuess);
+        console.log(guessedLetters);
+        showGuessedLetters();
+        updateWordInProgress(guessedLetters);
     }
-}
+};
 
-            
+const showGuessedLetters = function () { 
+    guessedUL.innerHTML = ''; // Empty UL
+    for (const letter of guessedLetters) { // Loop through each letter of guessedLetters array
+        const li = document.createElement("li"); // Create a list item
+        li.innerText = letter; // Set innerText of li to letter
+        guessedUL.append(li); // append li to UL
+    }
+}; 
+
+const updateWordInProgress = function (guessedLetters) {
+    const wordUpper = word.toUpperCase();
+    const wordArray = wordUpper.split('');
+    const updatedChars = [];
+    for (const letter of wordArray) {
+        if (guessedLetters.includes(letter)) {
+            updatedChars.push(letter.toUpperCase());
+        } else {
+            updatedChars.push('●');
+        }
+    }
+    //console.log(updatedChars);
+    wordInProgress.innerText = updatedChars.join('');
+    checkIfWon();
+};
+
+const checkIfWon = function () {
+    const textOfWordInProgress = wordInProgress.innerText
+    if (word.toUpperCase() === textOfWordInProgress.toUpperCase()) {
+        message.classList.add("win");
+        message.innerHTML= '<p class="highlight">You guessed correct the word! Congrats!</p>';
+    }
+};
