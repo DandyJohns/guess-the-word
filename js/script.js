@@ -52,15 +52,13 @@ const placeHolder = function(word) {
 
 guessButton.addEventListener('click', function (event) {
     event.preventDefault(); // Empty message paragraph
-    const usersGuess = letterInput.value; // Get the user's guess
     message.innerText = '';
-    
+    const usersGuess = letterInput.value; // Get the user's guess
     const goodGuess = validateInput(usersGuess); // validate the input value
     
-    if(goodGuess != undefined) {
+    if (goodGuess) {
         makeGuess(goodGuess);
     }
-
     letterInput.value = ''; // Clear the input field
 });
 
@@ -135,6 +133,6 @@ const checkIfWon = function () {
     const textOfWordInProgress = wordInProgress.innerText
     if (word.toUpperCase() === textOfWordInProgress.toUpperCase()) {
         message.classList.add("win");
-        message.innerHTML= '<p class="highlight">You guessed correct the word! Congrats!</p>';
+        message.innerHTML = '<p class="highlight">You guessed the correct word! Congrats!</p>';
     }
 };
